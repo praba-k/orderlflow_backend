@@ -1,0 +1,9 @@
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    enabled: false
+server:
+  tomcat:
+    max-swallow-size: 2MB
+

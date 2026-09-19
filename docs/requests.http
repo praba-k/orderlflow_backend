@@ -1,0 +1,95 @@
+@baseUrl = http://localhost:8080
+@customerEmail = replace-with-your-email
+@customerPassword = replace-with-your-password
+@customerToken = replace-with-registration-or-login-token
+@adminToken = replace-with-admin-token
+@categoryId = replace-with-category-uuid
+@productId = replace-with-product-uuid
+@addressId = replace-with-address-uuid
+@orderId = replace-with-order-uuid
+
+### Register a customer
+POST {{baseUrl}}/api/auth/register
+Content-Type: application/json
+
+{"email":"{{customerEmail}}","password":"{{customerPassword}}","name":"Portfolio Buyer"}
+
+### Login
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{"email":"{{customerEmail}}","password":"{{customerPassword}}"}
+
+### Create a category (admin)
+POST {{baseUrl}}/api/categories
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{"name":"Books"}
+
+### Create a product
+POST {{baseUrl}}/api/products
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{"name":"Reliable Systems","description":"A practical guide","categoryId":"{{categoryId}}","price":1000.00,"sku":"BOOK-01","status":"ACTIVE"}
+
+### Receive inventory
+POST {{baseUrl}}/api/inventory/{{productId}}/adjustments
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{"delta":100,"reason":"Opening stock"}
+
+### Browse products
+GET {{baseUrl}}/api/products?search=Reliable&sort=price,asc&page=0&size=20
+
+### Add a shipping address
+POST {{baseUrl}}/api/customers/me/addresses
+Authorization: Bearer {{customerToken}}
+Content-Type: application/json
+
+{"recipient":"Portfolio Buyer","line1":"1 Main Street","city":"Chennai","postalCode":"600001","country":"IN"}
+
+### Add to cart
+POST {{baseUrl}}/api/cart/items
+Authorization: Bearer {{customerToken}}
+Content-Type: application/json
+
+{"productId":"{{productId}}","quantity":2}
+
+### Checkout (repeat exactly to demonstrate idempotency)
+POST {{baseUrl}}/api/orders
+Authorization: Bearer {{customerToken}}
+Idempotency-Key: portfolio-checkout-001
+Content-Type: application/json
+
+{"addressId":"{{addressId}}","paymentScenario":"SUCCESS"}
+
+### Poll current order
+GET {{baseUrl}}/api/orders/{{orderId}}
+Authorization: Bearer {{customerToken}}
+
+### Poll payment
+GET {{baseUrl}}/api/orders/{{orderId}}/payment
+Authorization: Bearer {{customerToken}}
+
+### Cancel before processing; poll payment for refund
+POST {{baseUrl}}/api/orders/{{orderId}}/cancel
+Authorization: Bearer {{customerToken}}
+
+### Notifications
+GET {{baseUrl}}/api/notifications
+Authorization: Bearer {{customerToken}}
+
+### Low-stock report
+GET {{baseUrl}}/api/reports/low-stock?threshold=10&limit=20
+Authorization: Bearer {{adminToken}}
+
+### Revenue; change the range to cover your orders
+GET {{baseUrl}}/api/reports/revenue?from=2026-09-01T00:00:00Z&to=2026-10-01T00:00:00Z
+Authorization: Bearer {{adminToken}}
+
+### Readiness
+GET {{baseUrl}}/actuator/health/readiness
+

@@ -1,0 +1,11 @@
+spring:
+  task:
+    scheduling:
+      pool:
+        size: 1
+app:
+  jwt:
+    secret: test-only-secret-at-least-32-bytes-long-not-for-deployment
+  payment:
+    poll-ms: 3600000
+
