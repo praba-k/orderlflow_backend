@@ -27,7 +27,7 @@ spring:
       connect-timeout: 1s
       timeout: 1s
 server:
-  port: 8081
+  port: ${SERVER_PORT}
   shutdown: graceful
   error:
     include-message: never
