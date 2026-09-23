@@ -22,7 +22,8 @@ pipeline {
         stage('Deploy') {
             steps {
                 sh '''
-                    cp target/*.jar /deploy_jenkins/orderflow.jar
+                    cp target/*.jar /deploy_jenkins/dev/orderflow.jar
+                    sudo systemctl restart orderflow_dev.service
                 '''
             }
         }
