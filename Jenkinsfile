@@ -19,6 +19,12 @@ pipeline {
             }
         }
 
+        stage('Intentional Failure') {
+            steps {
+                sh 'exit 1'
+            }
+        }
+
         stage('Deploy') {
             steps {
                 sh '''
