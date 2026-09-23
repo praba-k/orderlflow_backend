@@ -27,7 +27,7 @@ spring:
       connect-timeout: 1s
       timeout: 1s
 server:
-  port: 8081
+  port: ${SERVER_PORT}
   shutdown: graceful
   error:
     include-message: never
@@ -52,7 +52,7 @@ management:
       enabled: ${REDIS_ENABLED:false}
 app:
   jwt:
-    secret: ${JWT_SECRET}
+    secret: "Yk4nNG|F&Og|Q!;:TP%J@{Yl%5UsJQ0H_7UbW;h3O9/"
     issuer: order-platform
     ttl: PT30M
   tax-rate: ${TAX_RATE:0.18}
