@@ -70,5 +70,15 @@ pipeline {
         success {
             archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
         }
+
+        failure {
+            echo "Pipeline failed. Check the console log..."
+
+            emailext(
+                subject: "Jenkins build failed. ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                body: "Build Failed. Check: ${env.BUILD_URL}",
+                to: "prabakarankasinathan63@gmail.com"
+            )
+        }
     }
 }
