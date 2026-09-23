@@ -28,17 +28,39 @@ pipeline {
             }
         }
 
+//         stage('Approval') {
+//             steps {
+//                 input message: 'Dev verified. Deploy to staging?'
+//             }
+//         }
+//
+//         stage('Deploy Staging') {
+//             steps {
+//                 sh '''
+//                     cp target/*.jar /deploy_jenkins/stage/orderflow.jar
+//                     sudo systemctl restart orderflow_stage.service
+//                 '''
+//             }
+//         }
         stage('Approval') {
             steps {
+                echo 'BEFORE APPROVAL'
                 input message: 'Dev verified. Deploy to staging?'
+                echo 'AFTER APPROVAL'
             }
         }
 
         stage('Deploy Staging') {
             steps {
+                echo 'STARTING STAGING DEPLOY'
                 sh '''
+                    echo "Running as:"
+                    whoami
+                    echo "Copying JAR..."
                     cp target/*.jar /deploy_jenkins/stage/orderflow.jar
-                    sudo systemctl restart orderflow_stage.service
+                    echo "Restarting service..."
+                    sudo -n systemctl restart orderflow_stage.service
+                    echo "STAGING DEPLOY COMPLETE"
                 '''
             }
         }
