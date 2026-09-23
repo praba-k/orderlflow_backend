@@ -27,8 +27,9 @@ public class RequestLoggingFilter extends OncePerRequestFilter {
         chain.doFilter(httpServletRequest, res);
       } finally {
         log.info(
-            "HTTP method={} status={} durationMs={}",
+            "HTTP method={} URI: {} status={} durationMs={}",
             httpServletRequest.getMethod(),
+            httpServletRequest.getRequestURI(),
             res.getStatus(),
             (System.nanoTime() - start) / 1_000_000);
         MDC.remove("customerId");
