@@ -18,6 +18,14 @@ pipeline {
                 sh 'mvn package -DskipTests'
             }
         }
+
+        stage('Deploy') {
+            steps {
+                sh '''
+                    cp target/*.jar /deploy_jenkins/orderflow.jar
+                '''
+            }
+        }
     }
 
     post {
