@@ -3,7 +3,7 @@ pipeline {
 
     parameters {
         choice(
-            name: 'ENVIRONEMT',
+            name: 'ENVIRONMENT',
             choices: ['dev', 'stage'],
             description: 'Choosing deployment environment'
         )
@@ -36,7 +36,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
-                    if(params.ENVIRONEMT = 'dev') {
+                    if(params.ENVIRONMENT == 'dev') {
                         sh '''
                             cp target/*.jar /deploy_jenkins/dev/orderflow.jar
                             sudo systemctl restart orderflow_dev.service
