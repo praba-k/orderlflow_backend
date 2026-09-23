@@ -27,6 +27,21 @@ pipeline {
                 '''
             }
         }
+
+        stage('Approval') {
+            steps {
+                input message: 'Dev verified. Deploy to staging?'
+            }
+        }
+
+        stage('Deploy Staging') {
+            steps {
+                sh '''
+                    cp target/*.jar /deploy_jenkins/stage/orderflow.jar
+                    sudo systemctl restart orderflow_stage.service
+                '''
+            }
+        }
     }
 
     post {
