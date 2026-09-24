@@ -54,15 +54,15 @@ pipeline {
 //             }
 //         }
 
-        stage('Deploy') {
-            steps {
-                sh '''
-                    sudo mkdir -p /deploy_jenkins/dev
-                    sudo cp target/*.jar /deploy_jenkins/dev/orderflow.jar
-                    sudo systemctl restart orderflow_dev.service
-                '''
-            }
-        }
+        // stage('Deploy') {
+        //     steps {
+        //         sh '''
+        //             sudo mkdir -p /deploy_jenkins/dev
+        //             sudo cp target/*.jar /deploy_jenkins/dev/orderflow.jar
+        //             sudo systemctl restart orderflow_dev.service
+        //         '''
+        //     }
+        // }
 
 //         stage('Approval') {
 //             steps {
