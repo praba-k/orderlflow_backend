@@ -38,12 +38,14 @@ pipeline {
                 script {
                     if(params.ENVIRONMENT == 'dev') {
                         sh '''
-                            cp target/*.jar /deploy_jenkins/dev/orderflow.jar
+                            sudo mkdir -p /deploy_jenkins/dev
+                            sudo cp target/*.jar /deploy_jenkins/dev/orderflow.jar
                             sudo systemctl restart orderflow_dev.service
                         '''
                     } else {
                         sh '''
-                            cp target/*.jar /deploy_jenkins/stage/orderflow.jar
+                            sudo mkdir -p /deploy_jenkins/stage
+                            sudo cp target/*.jar /deploy_jenkins/stage/orderflow.jar
                             sudo systemctl restart orderflow_stage.service
                         '''
                     }
