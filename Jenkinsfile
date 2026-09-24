@@ -83,7 +83,7 @@ pipeline {
             steps {
                 echo 'BEFORE APPROVAL'
                 input message: 'Dev verified. Deploy to staging?'
-                echo 'AFTER APPROVAL'
+                echo 'AFTER APPROVAL FOR STAGING DEPLOYMENT'
             }
         }
 
