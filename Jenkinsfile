@@ -33,35 +33,36 @@ pipeline {
 //             }
 //         }
 
-        stage('Deploy') {
-            steps {
-                script {
-                    if(params.ENVIRONMENT == 'dev') {
-                        sh '''
-                            sudo mkdir -p /deploy_jenkins/dev
-                            sudo cp target/*.jar /deploy_jenkins/dev/orderflow.jar
-                            sudo systemctl restart orderflow_dev.service
-                        '''
-                    } else {
-                        sh '''
-                            sudo mkdir -p /deploy_jenkins/stage
-                            sudo cp target/*.jar /deploy_jenkins/stage/orderflow.jar
-                            sudo systemctl restart orderflow_stage.service
-                        '''
-                    }
-
-                }
-            }
-        }
-
 //         stage('Deploy') {
 //             steps {
-//                 sh '''
-//                     cp target/*.jar /deploy_jenkins/dev/orderflow.jar
-//                     sudo systemctl restart orderflow_dev.service
-//                 '''
+//                 script {
+//                     if(params.ENVIRONMENT == 'dev') {
+//                         sh '''
+//                             sudo mkdir -p /deploy_jenkins/dev
+//                             sudo cp target/*.jar /deploy_jenkins/dev/orderflow.jar
+//                             sudo systemctl restart orderflow_dev.service
+//                         '''
+//                     } else {
+//                         sh '''
+//                             sudo mkdir -p /deploy_jenkins/stage
+//                             sudo cp target/*.jar /deploy_jenkins/stage/orderflow.jar
+//                             sudo systemctl restart orderflow_stage.service
+//                         '''
+//                     }
+//
+//                 }
 //             }
 //         }
+
+        stage('Deploy') {
+            steps {
+                sh '''
+                    sudo mkdir -p /deploy_jenkins/dev
+                    sudo cp target/*.jar /deploy_jenkins/dev/orderflow.jar
+                    sudo systemctl restart orderflow_dev.service
+                '''
+            }
+        }
 
 //         stage('Approval') {
 //             steps {
@@ -72,33 +73,40 @@ pipeline {
 //         stage('Deploy Staging') {
 //             steps {
 //                 sh '''
-//                     cp target/*.jar /deploy_jenkins/stage/orderflow.jar
-//                     sudo systemctl restart orderflow_stage.service
+//                    sudo mkdir -p /deploy_jenkins/stage
+//                    sudo cp target/*.jar /deploy_jenkins/stage/orderflow.jar
+//                    sudo systemctl restart orderflow_stage.service
 //                 '''
 //             }
 //         }
-//         stage('Approval') {
-//             steps {
-//                 echo 'BEFORE APPROVAL'
-//                 input message: 'Dev verified. Deploy to staging?'
-//                 echo 'AFTER APPROVAL'
-//             }
-//         }
+        stage('Approval') {
+            steps {
+                echo 'BEFORE APPROVAL'
+                input message: 'Dev verified. Deploy to staging?'
+                echo 'AFTER APPROVAL'
+            }
+        }
 
-//         stage('Deploy Staging') {
-//             steps {
-//                 echo 'STARTING STAGING DEPLOY'
-//                 sh '''
-//                     echo "Running as:"
-//                     whoami
-//                     echo "Copying JAR..."
-//                     cp target/*.jar /deploy_jenkins/stage/orderflow.jar
-//                     echo "Restarting service..."
-//                     sudo -n systemctl restart orderflow_stage.service
-//                     echo "STAGING DEPLOY COMPLETE"
-//                 '''
-//             }
-//         }
+        stage('Deploy Staging') {
+            steps {
+                echo 'STARTING STAGING DEPLOY'
+                sh '''
+                    echo "Running as:"
+                    whoami
+
+                    echo "Creating /deploy_jenkins/stage directory"
+                    sudo mkdir -p /deploy_jenkins/stage/
+
+                    echo "Copying JAR..."
+                    sudo cp target/*.jar /deploy_jenkins/stage/orderflow.jar
+
+                    echo "Restarting service..."
+                    sudo -n systemctl restart orderflow_stage.service
+
+                    echo "STAGING DEPLOY COMPLETE"
+                '''
+            }
+        }
     }
 
     post {
